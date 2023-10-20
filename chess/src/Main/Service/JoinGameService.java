@@ -13,7 +13,7 @@ public class JoinGameService {
    * @param request request to join a game
    * @return response to the request
    */
-  public JoinGameResponse JoinGame(JoinGameRequest request){
+  public JoinGameResponse JoinGame(JoinGameRequest request, String authToken){
     return null;
   }
 }

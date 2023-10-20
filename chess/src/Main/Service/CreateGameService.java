@@ -13,7 +13,7 @@ public class CreateGameService {
    * @param request request to create a game into the database
    * @return the response of the request
    */
-  public CreateGameResponse CreateGame(CreateGameRequest request){
+  public CreateGameResponse CreateGame(CreateGameRequest request, String authToken){
     return null;
   }
 }

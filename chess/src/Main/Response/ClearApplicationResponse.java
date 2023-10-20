@@ -1,10 +1,13 @@
 package Response;
 
+
+
+
 /**
  * Response to the request of Clearing the database
  */
 
-public class ClearApplicationResponse {
+public class ClearApplicationResponse  {
   /**
    * Message about the status of the Clear Application request
    */

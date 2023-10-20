@@ -56,6 +56,9 @@ public class ListGamesResponse {
     this.gameName=gameName;
     this.message=message;
   }
+  public ListGamesResponse(String message){
+    this.message = message;
+  }
 
   public Set<String> getGames() {
     return games;

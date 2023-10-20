@@ -19,7 +19,7 @@ public class UserDAO {
    * @return User created
    */
 
-  UserModel CreateUser(String username, String password, String email) throws DataAccessException{
+  public UserModel CreateUser(String username, String password, String email) throws DataAccessException{
     return null;
   }
 
@@ -31,7 +31,7 @@ public class UserDAO {
    * @return updated user
    */
 
-  UserModel UpdateUser(String username, String password) throws DataAccessException{
+  public UserModel UpdateUser(String username, String password) throws DataAccessException{
     return null;
   }
 
@@ -41,7 +41,7 @@ public class UserDAO {
    * @throws DataAccessException invalid username
    * @return Desired user
    */
-  UserModel GetUser(String username) throws DataAccessException{
+  public UserModel GetUser(String username) throws DataAccessException{
     return null;
   }
 
@@ -52,7 +52,7 @@ public class UserDAO {
    * @throws DataAccessException One or more invalid parameter(s)
    * @return whether the user was deleted or not.
    */
-  boolean DeleteUser (String username, String password) throws DataAccessException{
+  public boolean DeleteUser (String username, String password) throws DataAccessException{
     return false;
   }
 
@@ -63,7 +63,7 @@ public class UserDAO {
    * @return Desired user
    * @throws DataAccessException One or more invalid parameter(s)
    */
-  UserModel verifyUser (String username, String password) throws DataAccessException{
+  public UserModel verifyUser (String username, String password) throws DataAccessException{
     return null;
   }
 }

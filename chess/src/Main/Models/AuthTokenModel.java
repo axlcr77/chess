@@ -15,6 +15,10 @@ public class AuthTokenModel {
    */
   private String username;
 
+  public AuthTokenModel(String authToken, String username) {
+    this.authToken=authToken;
+    this.username=username;
+  }
 
   public String getAuthToken() {
     return authToken;

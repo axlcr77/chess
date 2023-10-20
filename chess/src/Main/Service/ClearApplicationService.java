@@ -1,6 +1,5 @@
 package Service;
 
-import Request.ClearApplicationRequest;
 import Response.ClearApplicationResponse;
 
 /**
@@ -11,10 +10,12 @@ public class ClearApplicationService {
 
   /**
    * Clear application call to the database
-   * @param request request to clear application
    * @return the response for the request to clear the application
    */
-  public ClearApplicationResponse clearApp(ClearApplicationRequest request){
-    return null;
+  public ClearApplicationResponse clearApp(){
+    //Logic
+
+    //This is success
+    return new ClearApplicationResponse(null);
   }
 }

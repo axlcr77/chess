@@ -15,30 +15,28 @@ public class AuthDAO {
    * @throws DataAccessException Invalid token or username
    * @return the new token that was created
    */
-  AuthTokenModel CreateToken (String token, String username) throws DataAccessException{
+  public AuthTokenModel CreateToken (String token, String username) throws DataAccessException{
     return null;
   }
 
   /**
    * Reads a token from the database
    * @param token name of the token
-   * @param username username associated with the token
    * @throws DataAccessException Invalid token or username
    * @return the token that was specified
    */
-  AuthTokenModel GetToken (String token, String username)throws DataAccessException{
-    return null;
+  public String GetToken (String token)throws DataAccessException{
+    return token;
   }
 
   /**
    * Update an existing token
    * @param token name of the token
-   * @param username username associated with the token
    * @throws DataAccessException Invalid token or username
    * @return the updated token
    */
 
-  AuthTokenModel UpdateToken (String token, String username)throws DataAccessException{
+  public AuthTokenModel UpdateToken (String token)throws DataAccessException{
     return null;
   }
 
@@ -50,7 +48,7 @@ public class AuthDAO {
    * @return whether the token was deleted or not.
    */
 
-  boolean DeleteToken (String token, String username)throws DataAccessException{
+  public boolean DeleteToken (String token, String username)throws DataAccessException{
     return false;
   }
 }

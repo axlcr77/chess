@@ -20,7 +20,7 @@ public class GameDAO {
    * @return Game that was created
    */
 
-  GameModel CreateGame (int gameID, String whiteUsername, String blackUsername, String gameName, ChessGame game)throws DataAccessException{
+  public GameModel CreateGame (int gameID, String whiteUsername, String blackUsername, String gameName, ChessGame game)throws DataAccessException{
     return null;
   }
 
@@ -30,7 +30,7 @@ public class GameDAO {
    * @throws DataAccessException Invalid gameID
    * @return desired game
    */
-  GameModel GetGame (int gameID)throws DataAccessException {
+  public GameModel GetGame (int gameID)throws DataAccessException {
     return null;
   }
 
@@ -41,7 +41,7 @@ public class GameDAO {
    * @throws DataAccessException One or more invalid parameter(s)
    * @return Updated game
    */
-  GameModel UpdateGame(ChessGame game, int gameID)throws DataAccessException{
+  public GameModel UpdateGame(ChessGame game, int gameID)throws DataAccessException{
     return null;
   }
 
@@ -51,21 +51,21 @@ public class GameDAO {
    * @throws DataAccessException Invalid gameID
    * @return whether the game was deleted.
    */
-  boolean DeleteGame (int gameID) throws DataAccessException{
+  public boolean DeleteGame (int gameID) throws DataAccessException{
     return false;
   }
 
   /**
    * Return all the games in the database
    */
-  void GetAllGames (){
+  public void GetAllGames (){
 
   }
 
   /**
    * Deletes all the games from the database
    */
-  void ClearAllGames(){
+  public void ClearAllGames(){
   }
 
   /**
@@ -74,7 +74,7 @@ public class GameDAO {
    * @param color desired color
    * @return whether the spot was claimed or not.
    */
-  boolean ClaimSpot(String username, ChessGame.TeamColor color){
+  public boolean ClaimSpot(String username, ChessGame.TeamColor color){
     return false;
   }
 }
