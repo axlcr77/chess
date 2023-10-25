@@ -7,16 +7,7 @@ import chess.ChessGame;
  */
 public class JoinGameRequest {
 
-  /**
-   * White pieces
-   */
-ChessGame.TeamColor white = ChessGame.TeamColor.WHITE;
-
-  /**
-   * Black pieces
-   */
-  ChessGame.TeamColor black = ChessGame.TeamColor.BLACK;
-
+  private ChessGame.TeamColor teamColor;
   /**
    * ID of the current game
    */
@@ -40,24 +31,11 @@ ChessGame.TeamColor white = ChessGame.TeamColor.WHITE;
     this.gameID=gameID;
   }
 
-
-  public ChessGame.TeamColor getWhite() {
-    return white;
+  public ChessGame.TeamColor getTeamColor() {
+    return teamColor;
   }
 
-
-  public void setWhite(ChessGame.TeamColor white) {
-    this.white=white;
-  }
-
-
-  public ChessGame.TeamColor getBlack() {
-    return black;
-  }
-
-
-
-  public void setBlack(ChessGame.TeamColor black) {
-    this.black=black;
+  public void setTeamColor(ChessGame.TeamColor teamColor) {
+    this.teamColor=teamColor;
   }
 }

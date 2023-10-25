@@ -3,6 +3,7 @@ package Service;
 import Response.ListGamesResponse;
 import dataAccess.AuthDAO;
 import dataAccess.DataAccessException;
+import dataAccess.GameDAO;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -19,20 +20,20 @@ public class ListGamesService {
 
    * @return response to the request
    */
-  public ListGamesResponse ListGames (String Authtoken) throws DataAccessException {
+  public ListGamesResponse ListGames (String Authtoken){
     AuthDAO authDAO = new AuthDAO();
-    String tokenString = authDAO.GetToken(Authtoken);
+    GameDAO gameDAO = new GameDAO();
     try{
       //Checking for error 401
-      if(Authtoken == null || tokenString == null){
+      if(Authtoken == null || authDAO.GetToken(Authtoken) == null){
         return new ListGamesResponse("unauthorized");
-        //Success case
+        //Success case 200
       }else if(authDAO.GetToken(Authtoken) != null){
-        return null;
+        return new ListGamesResponse(gameDAO.GetAllGames(),null);
       }
       //Catch is for error 500
     }catch (DataAccessException e){
-      return new ListGamesResponse("sever issue");
+      return new ListGamesResponse("server Error");
     }
     return null;
   }

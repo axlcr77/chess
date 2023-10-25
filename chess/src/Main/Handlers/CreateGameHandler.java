@@ -18,15 +18,7 @@ public class CreateGameHandler {
 
     //Update the status according to the message received by the service response
     response.status(status.updateResponseStatus(response1.getMessage()));
-//    if(response1.getMessage() == null){
-//      response.status(200);
-//    } else if (response1.getMessage().equals("bad request")) {
-//      response.status(400);
-//    } else if (response1.getMessage().equals("unauthorized")) {
-//      response.status(401);
-//    }else{
-//      response.status(500);
-//    }
+
     return gson.toJson(response1);
   }
 }

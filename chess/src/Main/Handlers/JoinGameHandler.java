@@ -18,11 +18,6 @@ public class JoinGameHandler {
 
     response.status(status.updateResponseStatus(response1.getMessage()));
 
-//    if(response1.getMessage() == null){
-//      response.status(200);
-//    } else if (response1.getMessage().equals("bad request")) {
-//      response.status(400);
-//    }
     return gson.toJson(response1);
   }
 }

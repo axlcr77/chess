@@ -14,8 +14,10 @@ public class updateStatus {
       return 401;
     } else if (message.equals("already taken")) {
       return 403;
-    } else {
+    } else if( message.equals("server Error")){
       return 500;
+    } else{
+      return 200;
     }
   }
 }

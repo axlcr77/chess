@@ -4,6 +4,8 @@ import Models.AuthTokenModel;
 import Request.LoginRequest;
 import Response.LoginResponse;
 import dataAccess.AuthDAO;
+import dataAccess.DataAccessException;
+import dataAccess.UserDAO;
 
 import java.util.UUID;
 
@@ -13,7 +15,7 @@ import java.util.UUID;
 
 public class LoginService {
   /**
-   * Call to login
+   * Call to log in
    * @param request request to login
    * @return response to the request
    */
@@ -22,10 +24,19 @@ public class LoginService {
       //UUID is just the token ID
       //Auth token model will have the username provided by the request and the UUID will give the string for that auth token
       AuthDAO authDAO = new AuthDAO();
-//      if(authDAO.GetToken() == null);
       String uuid =UUID.randomUUID().toString();
-
-      return null;
+      UserDAO userDAO = new UserDAO();
+      try {
+        //401 Error
+        if(!userDAO.verifyUser(request.getUsername(), request.getPassword())){
+          return new LoginResponse("unauthorized");
+        }else {
+          //Success
+          return new LoginResponse(null,authDAO.CreateToken(uuid, request.getUsername()), request.getUsername());
+        }
+      }catch (DataAccessException e){
+        return new LoginResponse("server Error");
+      }
     }
 
 }

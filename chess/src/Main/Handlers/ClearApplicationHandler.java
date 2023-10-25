@@ -18,12 +18,6 @@ public class ClearApplicationHandler {
 
     response.status(status.updateResponseStatus(response1.getMessage()));
 
-//    if(response1.getMessage() == null){
-//      //This is just for status
-//      response.status(200);
-//    }else{
-//      response.status(500);
-//    }
     //This is the information in the response
     return gson.toJson(response1);
   }

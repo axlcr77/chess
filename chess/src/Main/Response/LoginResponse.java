@@ -33,6 +33,9 @@ public class LoginResponse {
     this.username=username;
   }
 
+  public LoginResponse(String message){
+    this.message = message;
+  }
   public String getMessage() {
     return message;
   }

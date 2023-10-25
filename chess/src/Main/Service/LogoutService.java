@@ -20,14 +20,15 @@ public class LogoutService {
         //401 Error
         return new LogoutResponse("unauthorized");
       }
-      //Add success response
+      //success response
       if(authDAO.GetToken(authToken) != null){
+        authDAO.DeleteToken(authToken);
         return null;
       }
       //A data access exception would mean a server issue aka response status of 500
     } catch (DataAccessException e) {
-      return new LogoutResponse("Server Error");
+      return new LogoutResponse("server Error");
     }
-    return new LogoutResponse("Server Error");
+    return new LogoutResponse("server Error");
   }
 }

@@ -33,6 +33,13 @@ public class GameModel {
    */
   private ChessGame game;
 
+  public GameModel(int gameID, String whiteUserName, String blackUserName, String gameName, ChessGame game) {
+    this.gameID=gameID;
+    this.whiteUserName=whiteUserName;
+    this.blackUserName=blackUserName;
+    this.gameName=gameName;
+    this.game=game;
+  }
 
   public int getGameID() {
     return gameID;

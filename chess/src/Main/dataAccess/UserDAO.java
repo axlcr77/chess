@@ -2,13 +2,17 @@ package dataAccess;
 
 import Models.UserModel;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.SplittableRandom;
+import java.util.TreeMap;
 
 /**
  * User class to access the database
  */
 
 public class UserDAO {
+  private static Map<String, UserModel> userModelMap = new TreeMap<>();
 
   /**
    * Create a new user
@@ -19,21 +23,16 @@ public class UserDAO {
    * @return User created
    */
 
-  public UserModel CreateUser(String username, String password, String email) throws DataAccessException{
-    return null;
+  public String CreateUser(String username, String password, String email) throws DataAccessException{
+    UserModel userModel = new UserModel(username,password,email);
+    if(userModelMap.containsKey(userModel.getUsername())){
+      return null;
+    }else {
+      userModelMap.put(userModel.getUsername(),userModel);
+      return "Success!";
+    }
   }
 
-  /**
-   * Update existing user
-   * @param username name of the user to update
-   * @param password password of the user
-   * @throws DataAccessException One or more invalid parameter(s)
-   * @return updated user
-   */
-
-  public UserModel UpdateUser(String username, String password) throws DataAccessException{
-    return null;
-  }
 
   /**
    * Get a user from the database
@@ -41,7 +40,10 @@ public class UserDAO {
    * @throws DataAccessException invalid username
    * @return Desired user
    */
-  public UserModel GetUser(String username) throws DataAccessException{
+  public UserModel getUser(String username) throws DataAccessException{
+    if(userModelMap.containsKey(username)){
+      return userModelMap.get(username);
+    }
     return null;
   }
 
@@ -53,6 +55,10 @@ public class UserDAO {
    * @return whether the user was deleted or not.
    */
   public boolean DeleteUser (String username, String password) throws DataAccessException{
+    if(verifyUser(username,password)){
+      userModelMap.remove(username);
+      return true;
+    }
     return false;
   }
 
@@ -63,7 +69,16 @@ public class UserDAO {
    * @return Desired user
    * @throws DataAccessException One or more invalid parameter(s)
    */
-  public UserModel verifyUser (String username, String password) throws DataAccessException{
-    return null;
+  public boolean verifyUser (String username, String password) throws DataAccessException{
+    if(userModelMap.containsKey(username)){
+      return userModelMap.get(username).getPassword().equals(password);
+    }
+    return false;
   }
+
+  public void ClearUsers() throws DataAccessException{
+    //Clear all the users from the database/ data structure
+    userModelMap.clear();
+  }
+
 }

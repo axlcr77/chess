@@ -31,6 +31,14 @@ public class RegisterReponse {
     this.authToken=authToken;
     this.username=username;
   }
+  public RegisterReponse(String message){
+    this.message = message;
+  }
+
+  public RegisterReponse(String username, String authToken){
+    this.username = username;
+    this.authToken = authToken;
+  }
 
   public String getMessage() {
     return message;

@@ -1,5 +1,7 @@
 package Response;
 
+import Models.GameModel;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -12,27 +14,8 @@ public class ListGamesResponse {
   /**
    * Set to contain all the games in the database
    */
-  private Set<String> games = new HashSet<>();
+  private Set<GameModel> games = new HashSet<>();
 
-  /**
-   * ID of the game
-   */
-  private int gameID;
-
-  /**
-   * name of the user with the white pieces
-   */
-  private String whiteUsername;
-
-  /**
-   * name of the user with the black pieces
-   */
-  private String blackUsername;
-
-  /**
-   * name of the game
-   */
-  private String gameName;
   /**
    * Message about the status of the request
    */
@@ -42,63 +25,17 @@ public class ListGamesResponse {
   /**
    * Constructor for the response to the request to List games
    * @param games Set of games in the database
-   * @param gameID ID of the game
-   * @param whiteUsername name of the user with the white pieces
-   * @param blackUsername name of the user with the black pieces
-   * @param gameName name of the game
+
    * @param message message about the status of the request
    */
-  public ListGamesResponse(Set<String> games, int gameID, String whiteUsername, String blackUsername, String gameName, String message) {
-    this.games=games;
-    this.gameID=gameID;
-    this.whiteUsername=whiteUsername;
-    this.blackUsername=blackUsername;
-    this.gameName=gameName;
+  public ListGamesResponse(Set<GameModel> games, String message) {
+    this.games = games;
     this.message=message;
   }
   public ListGamesResponse(String message){
     this.message = message;
   }
 
-  public Set<String> getGames() {
-    return games;
-  }
-
-  public void setGames(Set<String> games) {
-    this.games=games;
-  }
-
-  public int getGameID() {
-    return gameID;
-  }
-
-  public void setGameID(int gameID) {
-    this.gameID=gameID;
-  }
-
-  public String getWhiteUsername() {
-    return whiteUsername;
-  }
-
-  public void setWhiteUsername(String whiteUsername) {
-    this.whiteUsername=whiteUsername;
-  }
-
-  public String getBlackUsername() {
-    return blackUsername;
-  }
-
-  public void setBlackUsername(String blackUsername) {
-    this.blackUsername=blackUsername;
-  }
-
-  public String getGameName() {
-    return gameName;
-  }
-
-  public void setGameName(String gameName) {
-    this.gameName=gameName;
-  }
 
   public String getMessage() {
     return message;

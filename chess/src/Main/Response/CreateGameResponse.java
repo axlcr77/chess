@@ -25,6 +25,9 @@ public class CreateGameResponse {
     this.message=message;
     this.gameID=gameID;
   }
+  public CreateGameResponse(String message){
+    this.message = message;
+  }
 
   public String getMessage() {
     return message;
