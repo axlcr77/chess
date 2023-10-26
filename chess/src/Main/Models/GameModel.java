@@ -2,6 +2,8 @@ package Models;
 
 import chess.ChessGame;
 
+import java.util.Objects;
+
 /**
  * Information about the Game such as gameID, name of the game, etc.
  */
@@ -39,6 +41,19 @@ public class GameModel {
     this.blackUsername=blackUserName;
     this.gameName=gameName;
     this.game=game;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    GameModel gameModel=(GameModel) o;
+    return gameID == gameModel.gameID && Objects.equals(whiteUsername, gameModel.whiteUsername) && Objects.equals(blackUsername, gameModel.blackUsername) && Objects.equals(gameName, gameModel.gameName) && Objects.equals(game, gameModel.game);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(gameID, whiteUsername, blackUsername, gameName, game);
   }
 
   public int getGameID() {

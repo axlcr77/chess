@@ -115,4 +115,7 @@ public class GameDAO {
   public int getMapSize_And_increase(){
     return mapSize++;
   }
+
+  public void CreateGame() {
+  }
 }
