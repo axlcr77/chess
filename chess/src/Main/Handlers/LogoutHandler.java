@@ -12,9 +12,11 @@ public class LogoutHandler {
     LogoutService serv = new LogoutService();
     LogoutResponse response1 =  serv.logout(request.headers("authorization"));
     updateStatus status = new updateStatus();
-
+    if(response1 == null){
+      response.status(200);
+      return "{}";
+    }
     response.status(status.updateResponseStatus(response1.getMessage()));
-
 
     return gson.toJson(response1);
   }

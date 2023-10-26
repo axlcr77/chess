@@ -11,6 +11,7 @@ import java.util.*;
 
 public class GameDAO {
   private static Map<Integer, GameModel> GameDAOMap = new TreeMap<>();
+  private static int mapSize =1;
 
   /**
    * Create a new game
@@ -80,7 +81,7 @@ public class GameDAO {
   public Set<GameModel> GetAllGames () throws DataAccessException{
     Set<GameModel> set = new HashSet<>();
     set.addAll(GameDAOMap.values());
-    return null;
+    return set;
   }
 
   /**
@@ -102,12 +103,16 @@ public class GameDAO {
       String blackUser = GameDAOMap.get(gameID).getBlackUserName();
       if (color == ChessGame.TeamColor.WHITE && whiteUser == null) {
       GameDAOMap.get(gameID).setWhiteUserName(username);
-      return "success!";
+      return username;
       } else if (color == ChessGame.TeamColor.BLACK && blackUser == null) {
         GameDAOMap.get(gameID).setBlackUserName(username);
-        return "success!";
+        return username;
       }
     }
     return "already taken";
+  }
+
+  public int getMapSize_And_increase(){
+    return mapSize++;
   }
 }

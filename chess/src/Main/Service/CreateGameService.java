@@ -24,20 +24,21 @@ public class CreateGameService {
     GameDAO gameDAO = new GameDAO();
     try{
       //Error 401
-      if(authToken == null || authDAO.GetToken(authToken) == null){
-        return new CreateGameResponse("unauthorized");
+      if(authDAO.GetToken(authToken) == null){
+        return new CreateGameResponse("unauthorized error");
 
         //Error 400
-      } else if (gameDAO.getGame(request.getGameID()) == null) {
-        return new CreateGameResponse("bad request");
-
+      } else if (request.getGameName() == null) {
+        return new CreateGameResponse("bad request error");
 
       //Success
-      } else if (gameDAO.getGame(request.getGameID()) != null && authDAO.GetToken(authToken) != null) {
+      } else if (request.getGameName() != null && authDAO.GetToken(authToken) != null) {
         //Create a game before returning null. This method is in charge of adding this game to the database/data structure
-        gameDAO.CreateGame(request.getGameID(), request.getWhiteUsername(), request.getBlackUsername()
+        //Create a way to track amount of map and assign that as the gameID
+        int gameID =gameDAO.getMapSize_And_increase();
+        gameDAO.CreateGame(gameID,null, null
                 ,request.getGameName(),new ChessGameImp());
-        return new CreateGameResponse(null, request.getGameID());
+        return new CreateGameResponse(null, gameID);
       }
       //Error 500
     }catch (DataAccessException e){

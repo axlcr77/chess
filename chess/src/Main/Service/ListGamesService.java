@@ -25,8 +25,8 @@ public class ListGamesService {
     GameDAO gameDAO = new GameDAO();
     try{
       //Checking for error 401
-      if(Authtoken == null || authDAO.GetToken(Authtoken) == null){
-        return new ListGamesResponse("unauthorized");
+      if(authDAO.GetToken(Authtoken) == null){
+        return new ListGamesResponse("unauthorized error");
         //Success case 200
       }else if(authDAO.GetToken(Authtoken) != null){
         return new ListGamesResponse(gameDAO.GetAllGames(),null);

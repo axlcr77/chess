@@ -17,12 +17,12 @@ public class GameModel {
   /**
    * name of the user with the white pieces
    */
-  private String whiteUserName;
+  private String whiteUsername;
 
   /**
    * name of the user with the black pieces
    */
-  private String blackUserName;
+  private String blackUsername;
 
   /**
    * name of the game
@@ -35,8 +35,8 @@ public class GameModel {
 
   public GameModel(int gameID, String whiteUserName, String blackUserName, String gameName, ChessGame game) {
     this.gameID=gameID;
-    this.whiteUserName=whiteUserName;
-    this.blackUserName=blackUserName;
+    this.whiteUsername=whiteUserName;
+    this.blackUsername=blackUserName;
     this.gameName=gameName;
     this.game=game;
   }
@@ -53,21 +53,21 @@ public class GameModel {
 
 
   public String getWhiteUserName() {
-    return whiteUserName;
+    return whiteUsername;
   }
 
 
   public void setWhiteUserName(String whiteUserName) {
-    this.whiteUserName=whiteUserName;
+    this.whiteUsername=whiteUserName;
   }
 
 
   public String getBlackUserName() {
-    return blackUserName;
+    return blackUsername;
   }
 
   public void setBlackUserName(String blackUserName) {
-    this.blackUserName=blackUserName;
+    this.blackUsername=blackUserName;
   }
 
   public String getGameName() {

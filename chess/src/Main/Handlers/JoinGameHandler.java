@@ -16,6 +16,11 @@ public class JoinGameHandler {
     JoinGameResponse response1 = serv.JoinGame(request1,authToken);
     updateStatus status = new updateStatus();
 
+    if(response1 == null){
+      response.status(200);
+      return "{}";
+    }
+
     response.status(status.updateResponseStatus(response1.getMessage()));
 
     return gson.toJson(response1);

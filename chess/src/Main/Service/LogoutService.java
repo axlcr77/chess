@@ -18,7 +18,7 @@ public class LogoutService {
     try {
       if(authToken == null || authDAO.GetToken(authToken) == null){
         //401 Error
-        return new LogoutResponse("unauthorized");
+        return new LogoutResponse("unauthorized error");
       }
       //success response
       if(authDAO.GetToken(authToken) != null){

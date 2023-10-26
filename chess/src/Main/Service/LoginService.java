@@ -29,8 +29,8 @@ public class LoginService {
       try {
         //401 Error
         if(!userDAO.verifyUser(request.getUsername(), request.getPassword())){
-          return new LoginResponse("unauthorized");
-        }else {
+          return new LoginResponse("unauthorized error");
+        }else{
           //Success
           return new LoginResponse(null,authDAO.CreateToken(uuid, request.getUsername()), request.getUsername());
         }

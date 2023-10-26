@@ -1,5 +1,6 @@
 package Service;
 
+import Models.UserModel;
 import Request.RegisterRequest;
 import Response.RegisterReponse;
 import dataAccess.AuthDAO;
@@ -27,17 +28,18 @@ public class RegisterService {
     try{
       //401 Error
       if(request.getUsername() == null || request.getPassword() == null || request.getEmail() == null){
-        return new RegisterReponse("bad request");
+        return new RegisterReponse("bad request error");
 
         //403 Error
         //Maybe add email
       } else if(userDAO.getUser(request.getUsername())!= null){
-        return new RegisterReponse("already taken");
+        return new RegisterReponse("already taken error");
 
         //success
       } else if (userDAO.getUser(request.getUsername()) ==null) {
-        return new RegisterReponse(userDAO.CreateUser(request.getUsername(), request.getPassword(), request.getEmail()),
-                authDAO.CreateToken(uuid, request.getUsername()));
+        String token =authDAO.CreateToken(uuid, request.getUsername());
+        UserModel userModel = userDAO.CreateUser(request.getUsername(), request.getPassword(), request.getEmail());
+        return new RegisterReponse(userModel.getUsername(),token);
       }
 
     }catch (DataAccessException e ){

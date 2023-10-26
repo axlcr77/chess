@@ -23,13 +23,13 @@ public class UserDAO {
    * @return User created
    */
 
-  public String CreateUser(String username, String password, String email) throws DataAccessException{
+  public UserModel CreateUser(String username, String password, String email) throws DataAccessException{
     UserModel userModel = new UserModel(username,password,email);
     if(userModelMap.containsKey(userModel.getUsername())){
       return null;
     }else {
       userModelMap.put(userModel.getUsername(),userModel);
-      return "Success!";
+      return userModel;
     }
   }
 

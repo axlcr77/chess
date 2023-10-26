@@ -25,7 +25,7 @@ public class AuthDAO {
       return null;
     }else{
       AuthTokenMap.put(token,authTokenModel);
-      return "Success!";
+      return token;
     }
   }
 

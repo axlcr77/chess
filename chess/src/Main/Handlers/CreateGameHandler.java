@@ -16,6 +16,7 @@ public class CreateGameHandler {
     CreateGameResponse response1 = serv.CreateGame(request1,authToken);
     updateStatus status = new updateStatus();
 
+
     //Update the status according to the message received by the service response
     response.status(status.updateResponseStatus(response1.getMessage()));
 

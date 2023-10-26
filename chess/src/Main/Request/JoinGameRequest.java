@@ -7,7 +7,7 @@ import chess.ChessGame;
  */
 public class JoinGameRequest {
 
-  private ChessGame.TeamColor teamColor;
+  private ChessGame.TeamColor playerColor;
   /**
    * ID of the current game
    */
@@ -17,8 +17,10 @@ public class JoinGameRequest {
    * Constructor for the request to join the game
    * @param gameID ID for the game to join
    */
-  public JoinGameRequest(int gameID) {
+  public JoinGameRequest(int gameID, ChessGame.TeamColor playerColor)
+  {
     this.gameID=gameID;
+    this.playerColor = playerColor;
   }
 
 
@@ -32,10 +34,10 @@ public class JoinGameRequest {
   }
 
   public ChessGame.TeamColor getTeamColor() {
-    return teamColor;
+    return playerColor;
   }
 
   public void setTeamColor(ChessGame.TeamColor teamColor) {
-    this.teamColor=teamColor;
+    this.playerColor=teamColor;
   }
 }

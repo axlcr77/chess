@@ -14,7 +14,7 @@ public class CreateGameResponse {
   /**
    * ID for the game
    */
-  private int gameID;
+  private Integer gameID = null;
 
   /**
    * Constructor for the Response to the create game request
@@ -41,7 +41,7 @@ public class CreateGameResponse {
     return gameID;
   }
 
-  public void setGameID(int gameID) {
+  public void setGameID(Integer gameID) {
     this.gameID=gameID;
   }
 }
