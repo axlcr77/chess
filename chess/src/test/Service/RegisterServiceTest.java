@@ -2,17 +2,42 @@ package Service;
 
 import Request.RegisterRequest;
 import Response.RegisterReponse;
+import dataAccess.AuthDAO;
+import dataAccess.DataAccessException;
+import dataAccess.UserDAO;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class RegisterServiceTest {
+  private RegisterService service;
+  private RegisterReponse response;
+  AuthDAO authDAO;
+  UserDAO userDAO;
+
+  @BeforeEach
+  void setup() throws DataAccessException {
+    service = new RegisterService();
+    authDAO = new AuthDAO();
+    userDAO = new UserDAO();
+
+    authDAO.ClearTokens();
+    userDAO.ClearUsers();
+  }
+
+  @AfterEach
+  void cleanUp() throws DataAccessException {
+    authDAO.ClearTokens();
+    userDAO.ClearUsers();
+  }
 
   @Test
   @DisplayName("Successful Register Service")
   void SuccessfulRegister() {
-    RegisterService service = new RegisterService();
+
     RegisterRequest request = new RegisterRequest("mr. Popo","Kami", "@squareCircles");
 
     RegisterReponse response = service.register(request);
@@ -24,7 +49,6 @@ class RegisterServiceTest {
   @Test
   @DisplayName("Unsuccessful Register Service")
   void UnsuccessfulRegisterService(){
-    RegisterService service = new RegisterService();
     RegisterRequest request1 = new RegisterRequest("Little Green","Big Green", "@Hey");
     RegisterRequest request2 = new RegisterRequest("Little Green","Big Green", "@Hey");
 

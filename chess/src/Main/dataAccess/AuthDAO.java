@@ -1,17 +1,25 @@
 package dataAccess;
 
 import Models.AuthTokenModel;
+import com.mysql.cj.jdbc.ConnectionImpl;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Map;
 import java.util.TreeMap;
+import java.sql.DriverManager;
 
 /**
  * Authorization class to access the database
  */
 
 public class AuthDAO {
-  private static Map<String,AuthTokenModel> AuthTokenMap = new TreeMap<>();
+//  private static Map<String,AuthTokenModel> AuthTokenMap = new TreeMap<>();
 
+  public Connection conect() throws DataAccessException {
+    return Database.getConnection();
+  }
   /**
    * Creates a new Token into the database
    * @param token name of the token
@@ -20,13 +28,30 @@ public class AuthDAO {
    * @return the new token that was created
    */
   public String CreateToken (String token, String username) throws DataAccessException{
-    AuthTokenModel authTokenModel = new AuthTokenModel(token,username);
-    if(AuthTokenMap.containsKey(token)){
-      return null;
-    }else{
-      AuthTokenMap.put(token,authTokenModel);
+    try{
+      Connection connection = conect();
+      var preparedStatement = connection.prepareStatement("INSERT INTO auth (token, username) VALUES (?,?)",Statement.RETURN_GENERATED_KEYS);
+      preparedStatement.setString(1,token);
+      preparedStatement.setString(2,username);
+
+      preparedStatement.executeUpdate();
       return token;
     }
+    catch (DataAccessException e){
+      throw new DataAccessException(e.getMessage());
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
+
+
+//    AuthTokenModel authTokenModel = new AuthTokenModel(token,username);
+//    if(AuthTokenMap.containsKey(token)){
+//      return null;
+//    }else{
+//      AuthTokenMap.put(token,authTokenModel);
+//      return token;
+//    }
+
   }
 
   /**
@@ -36,8 +61,26 @@ public class AuthDAO {
    * @return the token that was specified
    */
   public AuthTokenModel GetToken (String token)throws DataAccessException{
-    //Check that this should return the correct thing
-    return AuthTokenMap.getOrDefault(token, null);
+    try{
+      Connection connection = conect();
+      var preparedStatement = connection.prepareStatement("SELECT * FROM auth WHERE token=?");
+      preparedStatement.setString(1,token);
+      try(var rs = preparedStatement.executeQuery()){
+        if(rs.next()){
+          var Token = rs.getString("token");
+          var username  = rs.getString("username");
+          return new AuthTokenModel(Token,username);
+        }else{
+          return null;
+        }
+      }
+    } catch (SQLException e) {
+      return null;
+    }
+
+//
+//    //Check that this should return the correct thing
+//    return AuthTokenMap.getOrDefault(token, null);
   }
 
 
@@ -45,18 +88,35 @@ public class AuthDAO {
    * Delete an existing token
    * @param token name of the token
    * @throws DataAccessException Invalid token or username
-   * @return whether the token was deleted or not.
    */
 
-  public boolean DeleteToken (String token)throws DataAccessException{
-    if(AuthTokenMap.containsKey(token)){
-      AuthTokenMap.remove(token);
-      return true;
+  public void DeleteToken (String token)throws DataAccessException{
+    try{
+      Connection connection = conect();
+      var preparedStatement = connection.prepareStatement("DELETE FROM auth WHERE token=?");
+      preparedStatement.setString(1,token);
+      preparedStatement.executeUpdate();
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
     }
-    return false;
+
+//    if(AuthTokenMap.containsKey(token)){
+//      AuthTokenMap.remove(token);
+//      return true;
+//    }
+//    return false;
   }
 
   public void ClearTokens() throws DataAccessException{
-    AuthTokenMap.clear();
+    try{
+      Connection connection= conect();
+      var preparedStatement = connection.prepareStatement("TRUNCATE auth");
+
+      preparedStatement.executeUpdate();
+
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
+//    AuthTokenMap.clear();
   }
 }

@@ -35,7 +35,8 @@ public class CreateGameService {
       } else if (request.getGameName() != null && authDAO.GetToken(authToken) != null) {
         //Create a game before returning null. This method is in charge of adding this game to the database/data structure
         //Create a way to track amount of map and assign that as the gameID
-        int gameID =gameDAO.getMapSize_And_increase();
+        System.out.printf("token: %s, username: %s \n",authToken,authDAO.GetToken(authToken).getUsername());
+        int gameID =gameDAO.getMapSize_And_increase()+1;
         gameDAO.CreateGame(gameID,null, null
                 ,request.getGameName(),new ChessGameImp());
         return new CreateGameResponse(null, gameID);

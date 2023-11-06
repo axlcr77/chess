@@ -38,8 +38,9 @@ public class RegisterService {
         //success
       } else if (userDAO.getUser(request.getUsername()) ==null) {
         String token =authDAO.CreateToken(uuid, request.getUsername());
-        UserModel userModel = userDAO.CreateUser(request.getUsername(), request.getPassword(), request.getEmail());
-        return new RegisterReponse(userModel.getUsername(),token);
+        String userModel = userDAO.CreateUser(request.getUsername(), request.getPassword(), request.getEmail());
+        System.out.printf("username: %s, password: %s, email: %s",request.getUsername(),request.getPassword(),request.getEmail());
+        return new RegisterReponse(userModel,token);
       }
 
     }catch (DataAccessException e ){

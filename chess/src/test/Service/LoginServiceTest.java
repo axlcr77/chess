@@ -6,12 +6,34 @@ import dataAccess.AuthDAO;
 import dataAccess.DataAccessException;
 import dataAccess.GameDAO;
 import dataAccess.UserDAO;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class LoginServiceTest {
+
+  @BeforeEach
+  void setup() throws DataAccessException {
+    GameDAO gameDAO = new GameDAO();
+    AuthDAO authDAO= new AuthDAO();
+    UserDAO userDAO = new UserDAO();
+    userDAO.ClearUsers();
+    authDAO.ClearTokens();
+    gameDAO.ClearAllGames();
+  }
+
+  @AfterEach
+  void CleanUp() throws DataAccessException {
+    GameDAO gameDAO = new GameDAO();
+    AuthDAO authDAO= new AuthDAO();
+    UserDAO userDAO = new UserDAO();
+    userDAO.ClearUsers();
+    authDAO.ClearTokens();
+    gameDAO.ClearAllGames();
+  }
 
   @Test
   @DisplayName("Valid Login Case")
@@ -21,7 +43,6 @@ class LoginServiceTest {
     userDAO.CreateUser("Me","myPassword","@");
     LoginRequest request = new LoginRequest("Me","myPassword");
     LoginResponse response = service.login(request);
-
     assertEquals(response.getUsername(), "Me");
     assertNotNull(response.getAuthToken());
   }
@@ -32,7 +53,7 @@ class LoginServiceTest {
     LoginService service = new LoginService();
     UserDAO userDAO = new UserDAO();
     userDAO.CreateUser("Me","myPassword","@");
-    LoginRequest request = new LoginRequest("Me","MyPassword");
+    LoginRequest request = new LoginRequest("Me","MePassword");
     LoginResponse response = service.login(request);
 
     assertEquals("unauthorized error", response.getMessage());

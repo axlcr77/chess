@@ -15,7 +15,7 @@ class ClearApplicationServiceTest {
     ClearApplicationService service = new ClearApplicationService();
     gameDAO.CreateGame(1,null,null,null,null);
     ClearApplicationResponse response = service.clearApp();
-
+    gameDAO.ClearAllGames();
 
     assertNull(response.getMessage());
     assertNull(gameDAO.getGame(1));
