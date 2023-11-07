@@ -28,11 +28,10 @@ class CreateGameServiceTest {
 
   @BeforeEach
   void setup(){
-
     service = new CreateGameService();
     gameDAO = new GameDAO();
     authDAO = new AuthDAO();
-    request = new CreateGameRequest("null");
+    request = new CreateGameRequest("testGame");
   }
 
   @AfterEach
@@ -62,6 +61,6 @@ class CreateGameServiceTest {
     gameDAO.CreateGame();
 
     Set<GameModel> set = new HashSet<>();
-    assertEquals(set,gameDAO.GetAllGames());
+    assertIterableEquals(set, gameDAO.GetAllGames());
   }
 }

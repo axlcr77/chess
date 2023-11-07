@@ -1,12 +1,14 @@
 package dataAccess;
 
 import Models.GameModel;
+import chess.ChessBoard;
 import chess.ChessGame;
+import chess.ChessGameImp;
 import com.google.gson.Gson;
-import com.mysql.cj.jdbc.ConnectionImpl;
-
+import com.google.gson.GsonBuilder;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.*;
 
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
@@ -18,9 +20,11 @@ import static java.sql.Statement.RETURN_GENERATED_KEYS;
 public class GameDAO {
 //  private static Map<Integer, GameModel> GameDAOMap = new TreeMap<>();
 //  private static int mapSize =1;
-
   public Connection conect() throws DataAccessException {
     return Database.getConnection();
+  }
+  public void closeConnection(Connection connection) throws DataAccessException{
+     Database.closeConnection(connection);
   }
 
   /**
@@ -39,23 +43,33 @@ public class GameDAO {
     String JsonGame = gson.toJson(game);
       try {
         Connection connection = conect();
-        var preparedStatement = connection.prepareStatement("INSERT INTO chess (gameid, gameName, white_UserName, black_UserName, game) VALUES (?,?,?,?,?)", RETURN_GENERATED_KEYS);
+        var preparedStatement = connection.prepareStatement("INSERT INTO chess (gameid, gameName, white_UserName, black_UserName, game) VALUES (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
         preparedStatement.setInt(1,gameID);
         preparedStatement.setString(2,gameName);
         preparedStatement.setString(3,whiteUsername);
         preparedStatement.setString(4,blackUsername);
         preparedStatement.setString(5,JsonGame);
-
         preparedStatement.executeUpdate();
 
-        var resultSet = preparedStatement.getGeneratedKeys();
-        var ID = 0;
-        if(resultSet.next()){
-          ID = resultSet.getInt(1);
-        }
+//        var resultSet = preparedStatement.getGeneratedKeys();
+//        var ID = 0;
+//        if(resultSet.next()){
+//          ID = resultSet.getInt(1);
+//        }
 
-        //FIXME Deserialize the game
-        return new GameModel(ID,whiteUsername,blackUsername,gameName,null);
+        try(var prepStatement = connection.prepareStatement("Select game FROM chess WHERE gameid=?")) {
+          prepStatement.setInt(1, gameID);
+          try (var rs=prepStatement.executeQuery()) {
+            if (rs.next()) {
+              var json=rs.getString("game");
+              var builder=new GsonBuilder();
+              builder.registerTypeAdapter(ChessBoard.class, new ChessAdapter());
+              var gameFromJson=builder.create().fromJson(json, ChessGameImp.class);
+              closeConnection(connection);
+              return new GameModel(gameID, whiteUsername, blackUsername, gameName, gameFromJson);
+            }
+          }
+        }
       }catch (DataAccessException e){
         throw new DataAccessException(e.getMessage());
       } catch (SQLException e) {
@@ -71,6 +85,7 @@ public class GameDAO {
 //      GameDAOMap.put(gameID,gameModel);
 //      return gameModel;
 //    }
+    return null;
   }
 
   /**
@@ -94,9 +109,13 @@ public class GameDAO {
           var whiteUsername = rs.getString("white_UserName");
           var blackUsername = rs.getString("black_UserName");
           var game = rs.getString("game");
-          var des = gson.fromJson(game,ChessGame.class);
+
+          var json=rs.getString("game");
+          var builder=new GsonBuilder();
+          builder.registerTypeAdapter(ChessBoard.class, new ChessAdapter());
+          var gameFromJson=builder.create().fromJson(json, ChessGameImp.class);
           System.out.printf("Game ID: %d, Game Name: %s, white Username: %s, black Username: %s, game: %s",gameid,gameName,whiteUsername,blackUsername,game);
-            return  new GameModel(gameid,gameName,whiteUsername,blackUsername,des);
+          return  new GameModel(gameid,whiteUsername,blackUsername,gameName,gameFromJson);
           }else {
             return null;
           }
@@ -154,8 +173,6 @@ public class GameDAO {
       var preparedStatement= connection.prepareStatement("DELETE FROM chess WHERE gameid=?");
       preparedStatement.setInt(1,gameID);
       preparedStatement.executeUpdate();
-
-
     } catch (SQLException e) {
       throw new RuntimeException(e);
     } catch (DataAccessException e){
@@ -179,7 +196,6 @@ public class GameDAO {
     try{
       Connection connection = conect();
       var preparedStatement = connection.prepareStatement("SELECT * FROM chess");
-//      preparedStatement.executeUpdate();
 
       //Maybe deserialize the games and put them into a gamemodel so I can add them to a set?
       try(var rs = preparedStatement.executeQuery()) {
@@ -189,12 +205,12 @@ public class GameDAO {
           var whiteUsername = rs.getString("white_UserName");
           var blackUsername = rs.getString("black_UserName");
           var game = rs.getString("game");
-
           System.out.printf("Game ID: %d, Game Name: %s, white Username: %s, black Username: %s, game: %s",gameid,gameName,whiteUsername,blackUsername,game);
-
-          //Deserializing is not as simple as this
-          var deserializedgame = gson.fromJson(game,ChessGame.class);
-          GameModel gameModel = new GameModel(gameid,whiteUsername,blackUsername,gameName,deserializedgame);
+          var json=rs.getString("game");
+          var builder=new GsonBuilder();
+          builder.registerTypeAdapter(ChessBoard.class, new ChessAdapter());
+          var gameFromJson=builder.create().fromJson(json, ChessGameImp.class);
+          GameModel gameModel = new GameModel(gameid,whiteUsername,blackUsername,gameName,gameFromJson);
           set.add(gameModel);
         }
       }
@@ -217,8 +233,7 @@ public class GameDAO {
       Connection connection = conect();
       var preparedStatement = connection.prepareStatement("TRUNCATE chess");
       preparedStatement.executeUpdate();
-
-
+      closeConnection(connection);
     }catch (DataAccessException e){
       throw new DataAccessException(e.getMessage());
     } catch (SQLException e) {
@@ -236,7 +251,8 @@ public class GameDAO {
   public String ClaimSpot(String username, ChessGame.TeamColor color, int gameID){
     try{
       Connection connection= conect();
-      var preparedStatement = connection.prepareStatement("SELECT white_UserName,  black_UserName FROM chess");
+      var preparedStatement = connection.prepareStatement("SELECT white_UserName, black_UserName FROM chess WHERE gameid=?");
+        preparedStatement.setInt(1,gameID);
 
       try(var rs = preparedStatement.executeQuery()){
         if(rs.next()){
@@ -246,17 +262,23 @@ public class GameDAO {
             try(var prepStatement2 = connection.prepareStatement("UPDATE chess SET white_UserName=? WHERE gameid=?")) {
               prepStatement2.setString(1, username);
               prepStatement2.setInt(2, gameID);
+              prepStatement2.executeUpdate();
+              closeConnection(connection);
               return username;
             }
-          }else if(color == ChessGame.TeamColor.BLACK && black == null){
+          }
+          if(color == ChessGame.TeamColor.BLACK && black == null){
             try(var prepStatement2 = connection.prepareStatement("UPDATE chess SET black_UserName=? WHERE gameid=?")){
               prepStatement2.setString(1,username);
               prepStatement2.setInt(2,gameID);
+              prepStatement2.executeUpdate();
+              closeConnection(connection);
               return username;
             }
           }
         }
       }
+      closeConnection(connection);
     } catch (DataAccessException e) {
       throw new RuntimeException(e);
     } catch (SQLException e) {

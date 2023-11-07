@@ -21,6 +21,9 @@ public class UserDAO {
   public Connection conect() throws DataAccessException {
     return Database.getConnection();
   }
+  public void closeConnection(Connection connection)throws DataAccessException{
+    Database.closeConnection(connection);
+  }
 
   /**
    * Create a new user
@@ -41,6 +44,7 @@ public class UserDAO {
       preparedStatement.setString(3,email);
 
       preparedStatement.executeUpdate();
+      closeConnection(connection);
       return username;
     }catch (DataAccessException e){
       throw new DataAccessException(e.getMessage());
@@ -107,11 +111,12 @@ public class UserDAO {
   public void DeleteUser (String username, String password) throws DataAccessException{
     try{
       Connection connection = conect();
-      var preparedStatement = connection.prepareStatement("DELETE FROM users WHERE username=? password=?");
+      var preparedStatement = connection.prepareStatement("DELETE FROM users WHERE username=? AND password=?");
 
       preparedStatement.setString(1,username);
       preparedStatement.setString(2,password);
       preparedStatement.executeUpdate();
+      closeConnection(connection);
     }catch (DataAccessException e){
       throw new DataAccessException(e.getMessage());
     }catch (SQLException e){
@@ -143,9 +148,11 @@ public class UserDAO {
       if(resultset.next()){
         var RealPassword = resultset.getString("password");
         if(password.equals(RealPassword)){
+          closeConnection(connection);
           return true;
         }
       }
+      closeConnection(connection);
       return false;
 
     } catch (SQLException e) {
@@ -166,6 +173,7 @@ public class UserDAO {
       Connection connection = conect();
       var preparedStatement = connection.prepareStatement("TRUNCATE users");
       preparedStatement.executeUpdate();
+      closeConnection(connection);
     }catch (DataAccessException e){
       throw new DataAccessException(e.getMessage());
     }catch (SQLException e ){

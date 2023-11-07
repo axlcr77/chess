@@ -20,6 +20,10 @@ public class AuthDAO {
   public Connection conect() throws DataAccessException {
     return Database.getConnection();
   }
+
+  public void CloseConnection(Connection connection) throws DataAccessException{
+    Database.closeConnection(connection);
+  }
   /**
    * Creates a new Token into the database
    * @param token name of the token
@@ -96,6 +100,7 @@ public class AuthDAO {
       var preparedStatement = connection.prepareStatement("DELETE FROM auth WHERE token=?");
       preparedStatement.setString(1,token);
       preparedStatement.executeUpdate();
+      CloseConnection(connection);
     } catch (SQLException e) {
       throw new RuntimeException(e);
     }
@@ -113,7 +118,7 @@ public class AuthDAO {
       var preparedStatement = connection.prepareStatement("TRUNCATE auth");
 
       preparedStatement.executeUpdate();
-
+      CloseConnection(connection);
     } catch (SQLException e) {
       throw new RuntimeException(e);
     }
